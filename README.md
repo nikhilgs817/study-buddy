@@ -2,7 +2,15 @@
 
 Study Buddy is a Codex skill for people preparing for certification exams. Bring a question bank, answer key, course slides, or study guide. It can coach you through a mock one question at a time, explain a difficult topic, and turn a course into a visual revision document. Your study files and progress live in your workspace.
 
-## Setup
+## Claude
+
+Download the [Claude upload ZIP](https://github.com/nikhilgs817/study-buddy/raw/refs/heads/main/claude/study-buddy.zip). In Claude, enable code execution, open **Customize > Skills**, choose the upload option, and enable Study Buddy. Attach a bank and ask "Use Study Buddy to quiz me from question 1." Upload your saved progress when moving to a fresh chat. The [Claude edition](claude/study-buddy/) includes the question lookup helper, diagram example, review workflows and voice score preferences. [Anthropic setup instructions](https://support.claude.com/en/articles/12512180-use-skills-in-claude)
+
+## ChatGPT account
+
+On an eligible account, open **Plugins > Skills > Add > Upload from your computer**, upload the skill folder as a ZIP, and install it if prompted. Check the Installed collection. Availability depends on your workspace. [OpenAI Skills guide](https://help.openai.com/en/articles/20001066-skills-in-chatgpt)
+
+## Codex setup
 
 You need Codex with access to a local workspace. Git is used for the installation below. The included question lookup helper uses Python 3.7+ and its standard library. For PDFs, slides, and document export, Study Buddy uses the document tools available in your Codex environment.
 
