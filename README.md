@@ -41,6 +41,8 @@ Open the client's voice control when available. Read and show is the default. Yo
 
 If live narration changes the item or option order, say “wrong question.” Study Buddy reopens the printed item and asks again before grading. The app controls speech playback. For verbatim playback, use Read Aloud on the displayed question if available.
 
+After an answer, you hear one verdict and a brief reason. The running score appears in chat. By default you hear the score every ten newly graded first attempts, when the mock ends, or whenever you ask “How am I doing?” Say “Only show my score” or “Read my score every five answers” to change that. Say “next” to hear the next question directly, or “repeat” to hear the current item again.
+
 ## Create study materials
 
 | Ask for | Example request |
