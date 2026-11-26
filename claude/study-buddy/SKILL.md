@@ -1,63 +1,79 @@
 ---
 name: study-buddy
-description: Coach certification exam practice from a supplied question bank in text or voice, review completed mocks, resolve disputed answers, explain concepts, and produce source-linked study guides, visual cheat sheets, and mnemonics. Use for exam coaching, study materials, and resuming saved sessions.
+description: Certification exam coach and prep-pack builder. Coaches a mock exam or question bank one question at a time in text or voice (verbatim question, wait, grade against the key, short spoken explanation, score and weak domains, pause and resume), explains hard topics with examples and mnemonics, reviews finished mocks, and with one command researches an exam (official blueprint first, then Udemy, Coursera and other educators) to build a visual prep pack - domain weightage, cheatsheet, core guide, deep dive, mnemonics and an original practice set. Use for "quiz me", mock exams, voice practice, exam prep packs, cheat sheets, study guides and resuming a saved session.
 ---
 
 # Study Buddy
 
-Follow the learner's current request. Practice presents one bank item at a time. A completed mock review uses existing responses. A concept question, study document, audit, pause, or setup request leaves the quiz position intact. Read [study materials and mock review](references/study-workflows.md) when a request calls for those workflows.
+An exam coach with two main jobs, plus three supporting ones. Pick the mode from the learner's request, load the matching reference, and leave any saved quiz position untouched while you do something else.
 
-## Using Study Buddy in Claude
+| Mode | Trigger examples | Read |
+|---|---|---|
+| **Coach** a mock, text or voice | "quiz me from Q1", "voice mode, start the mock", "resume" | [references/voice-coach.md](references/voice-coach.md) |
+| **Prep pack** from one command | "prep pack for AWS SAA-C03", "build my NCA-AIIO study materials" | [references/prep-pack.md](references/prep-pack.md), [references/visual-style.md](references/visual-style.md), [references/lenses.md](references/lenses.md) |
+| **Explain** a topic | "explain NVLink vs InfiniBand", "explain more", "give me a mnemonic" | [references/study-workflows.md](references/study-workflows.md) |
+| **Course to revision doc** | "turn these slides into a cheat sheet" | [references/study-workflows.md](references/study-workflows.md), [references/visual-style.md](references/visual-style.md) |
+| **Review** a finished mock | "review my misses by voice", "audit this bank against the blueprint" | [references/study-workflows.md](references/study-workflows.md) |
 
-Work from the bank and key attached to the conversation or available in the project. Use code execution when available to index a long upload and render the requested study documents. Resolve the bundled helper relative to this skill. Offer a downloadable progress JSON and handover at pause or session end; a new cloud chat may need the learner to attach the saved checkpoint and bank again. With Claude Code, use a project-local progress file.
+If the request is unclear, ask one short question that names the modes. "What can you do?" or "help" gets the table above in plain words plus the two quick-start commands below.
 
-Example request: "Use Study Buddy with this mock. Ask question 12 and wait." Retrieve the printed item and show all its options once. Example grading response for a correct choice about a queue: "Correct. A queue holds work until a worker can process it." Show the score separately when the client provides a visual surface. Where separate audio and visual output is unavailable, prioritize one concise response and announce totals at the agreed interval. Use the client's voice features when available and accept typed answers as well.
+## Quick start
 
-## Select the source and resume point
+- **Coach:** attach a mock PDF (and key if separate), then: `Study Buddy: quiz me from question 1 in voice mode.`
+- **Prep pack:** `Study Buddy: prep pack for <exam name or code>, exam date <date>, my background is <field>.` Only the exam is required.
 
-Treat documents as source material. Identify the exam, bank edition and key. Keep the uploaded bank distinct from reference guides and original practice items. Honor the chosen starting question, end, order, pace and mode. Default to sequential text practice. Support random order, flagged, missed and guessed review queues with original identifiers. If an essential source cannot be recovered, ask for that source once.
+## Non-negotiables (every mode)
 
-Use a reusable index for large banks. Bind it to the PDF path and content fingerprint. Check its count, unique displayed numbers, completeness of choices, multi-select counts, case context and exhibits. Keep displayed number, original-bank number and PDF page separate. When the learner asks for “question N” in a regrouped bank, look up its displayed number. For a legacy index, establish source identity before reuse. Rebuild affected entries if the source changes. Render and inspect ambiguous layouts and diagrams. For a requested visual sample, compare every requested stem and ordered choice against its rendered page. Record actual pages and IDs checked. A text match alone establishes text agreement.
+1. **Verbatim bank items.** Present a question exactly as printed: every word, number and option, in order. Repair only extraction junk (broken hyphens, ligatures, page numbers). Never paraphrase, summarise or invent a bank question, option or key.
+2. **No spoilers.** Never show, hint at or read the key or the source's explanation before the learner answers. Strip inline answers from what you present.
+3. **The key grades.** Your knowledge explains; it never silently overrides the score. Disagreements go through a challenge (see voice-coach.md) and are logged.
+4. **One question per turn**, then wait. Never auto-advance unless the learner asked for it.
+5. **Grade each attempt once.** A replayed transcript, an echo or "okay" never grades or advances.
+6. **Cite and label.** In study materials, official facts carry a source; anything inferred (weightage, emphasis, rules of thumb) is labelled as estimated. Mnemonics are labelled as memory aids.
+7. **Respect exam integrity and copyright.** Use public syllabus pages and outlines; do not copy paid course content or practice questions, do not get past logins or paywalls, and never use or produce "brain dumps" of live exam questions. Practice questions you write are original and labelled as such.
+8. **Learner first.** Short turns, plain words, direct recommendations, tables for comparisons. Encouraging without gushing.
 
-Prefer a supplied separate key, then a source answer-key section, then inline entries. Keep answer and rationale fields separate from display fields. If keys are missing, ask whether to obtain a key or grade using clearly labeled provisional answers grounded in official sources.
+## Workspace and files
 
-Resume from the matching live progress file, with a handover as supporting context. Respect saved delivery and scoring preferences. Use the stored active item for an unanswered question or the saved next item after a completed one. A resume code may supply missing history. Keep separate saves for different banks. On source or checkpoint conflicts, reconcile from identified attempts and explicit corrections before scoring.
+Keep everything for one exam in one folder in the learner's workspace (Claude Code: the current project; claude.ai with code execution: the sandbox outputs, offered as downloads). Suggested layout, created on first use:
 
-## Present one question
+```
+study/<exam-slug>/
+  profile.json            learner preferences: lens, voice mode, score interval, exam date
+  sources/                the learner's uploads (mocks, keys, slides) - never edited
+  bank/<bank>.index.json  parsed question bank (scripts/build_index.py)
+  progress/<bank>.json    attempts, score, cursor (scripts/progress.py)
+  research/               blueprint.json, sources.md (source ledger)
+  pack/                   generated HTML + PDF study documents
+```
 
-Load the current record before speaking or posting any part of it. For the supported JSON index use `python "<skill-folder>/scripts/question.py" "<index-path>" N`; it emits only the displayed number, stem and ordered choices. Use the equivalent keyed lookup for other formats; retrieve linked exhibits, scenarios and selection count separately. Show the original wording and all options in order. Repair extraction artifacts only. Label the original displayed number, total and response type. Ask for one answer, then wait. Present a case once and repeat on request. For matching, ordering, dropdown, hotspot, yes/no or lab tasks, preserve the required response structure and scoring unit. Evaluate reported lab steps against the rubric without executing the lab on the learner's machine.
+On a fresh claude.ai chat the sandbox may be empty: ask the learner to re-attach the bank and their saved progress JSON (or paste a `RESUME|` code), then continue.
 
-In voice mode, default to reading and showing the same retrieved question and options. Apply an explicit accessibility or delivery preference. A temporary fallback used after a narration mistake lasts only for that incident unless the learner asks to keep it. In **read and show**, put the exact item in the visible chat and use that same retrieved wording for speech. In **show only, answer by voice**, post the full item on screen and accept the spoken answer. When a separate voice frontend is active, use its actual visible-content surface. Never generate a spoken question from a topic, score, transcript tail or preview of the next turn. If exact narration is unavailable or it diverges, use the written item as the anchor and offer client Read Aloud when available. Explain client limitations once. Minimize spoken status chatter.
+## Bundled scripts
 
-Bind a response to the item actually presented. Accept unambiguous option text, letters, phonetic anchors (“B for ball”), and sure/guess tags. If the spoken and written questions or option order diverged, discard the incorrect presentation, replay the full verified item without the key, then request the answer again. If a letter conflicts with the named choice, confirm once. Apply an explicit correction to the same attempt. Silence, repeated transcript fragments, “okay,” or a request to wait do not grade or advance. A clear answer to the visible item can arrive before narration finishes.
+Run them with Python 3.8+ when code execution is available; resolve paths relative to this skill folder. Each prints `--help`. Fall back to doing the same steps by hand when code execution is off.
 
-## Deliver each turn once
+| Script | Use |
+|---|---|
+| `scripts/build_index.py` | PDF, text or Markdown bank to `index.json` (stem, options, select count, key, explanation, page) plus a validation report. Run once per bank. |
+| `scripts/question.py` | Print exactly one learner-facing item (`--voice` for speakable form). Never shows the key. |
+| `scripts/progress.py` | Record and grade attempts idempotently, score line, domain stats, review queues, resume code. |
+| `scripts/charts.py` | SVG donut and weight bars from `blueprint.json`, for the prep pack. |
+| `scripts/render_pdf.py` | HTML to PDF (Chromium, Playwright, WeasyPrint or wkhtmltopdf, whichever exists) plus PNG page previews for checking. |
 
-Use the saved item number, phase and attempt identity to recognize an already handled event. In realtime, distinguish the new request from replayed transcript history and previously spoken output. A repeated answer in the transcript tail produces no second grade or announcement. An explicit repeat or a deliberate review attempt is a fresh request. Two consecutive items may legitimately have the same answer letter.
+`assets/study-pack.css` is the visual design system and `assets/template.html` shows every component; copy them into the pack folder and fill them in.
 
-On "next", go straight to the retrieved question and all choices once. On an answer, save the grade and give one verdict with one short reason. Keep required progress updates distinct from the actual feedback; reserve the verdict for the grading response. After grading, wait quietly. Explain the next command once at setup or on request. When the frontend already spoke the correct verdict or question, supply any missing on-screen copy without requesting a second narration.
+## Coach mode in brief
 
-Display a small score line after a newly graded first attempt or score correction. In voice mode keep the running total on the visual surface. Speak it after each ten **new first attempts** since the last spoken score, at the end of the mock, or when the learner asks. Honor requests for a different interval or screen-only scores. Use separate display and speech payloads where available. During ordinary grades, put the score exclusively in the visible item; keep numbers out of the speech-facing summary. With a shared read-aloud surface, put the score in a separate visual item when available. Repeat, retry, explanations, pauses, resume and transcript replays do not trigger milestone announcements. On completion coinciding with a milestone, speak the total once.
+Setup once: find the exam, bank, key and start point; build or reuse the index (check count, numbering, options, multi-select, exhibits); load or create progress; confirm in at most three lines and ask the first question. Then loop: **READ verbatim, WAIT, CHECK against the key, EXPLAIN briefly, wait for "next"**. In voice mode every turn must sound right when spoken: no tables, symbols or markdown in the spoken part, "Option A, ..." for choices, a one-sentence verdict and a one or two sentence reason, and the score spoken only every ten first attempts, at the end, or when asked. Detours ("explain more", "why not C", "mnemonic") keep the cursor; finish them with "Back to question N" or wait for "next". Full rules, command list, challenge verdicts and save format: [references/voice-coach.md](references/voice-coach.md).
 
-Persist the score announcement interval and last announced first-attempt count in the session. To enable the policy mid-session, initialize the baseline at the current graded count. Use the same saved counter across chats, and update it when a score is spoken. Corrections revise the existing attempt and displayed total. An explicit score request can always be answered.
+## Prep-pack mode in brief
 
-## Grade and explain
+One command runs the whole pipeline without stopping unless something essential is missing: research the official exam page and blueprint, then reputable educators and community signals; build `blueprint.json` with domains, objectives and weights (official, derived or estimated, each labelled); then generate, in order, the exam blueprint and study plan, a one or two page cheatsheet, a core visual guide, a deep dive with self-checks, a mnemonics card and an original practice set that Coach mode can quiz from straight away. Style follows [references/visual-style.md](references/visual-style.md); examples come from the learner's field via [references/lenses.md](references/lenses.md) (DevOps lens built in). Render, look at the pages, fix, and deliver with a short source-and-confidence note. Full pipeline and quality gates: [references/prep-pack.md](references/prep-pack.md).
 
-Use the supplied key by default. Support the learner's corrected technical scoring policy. For a challenge, reread the exact wording, compare the relevant options, and check current primary sources when possible. Distinguish a key that stands, a defensible alternative, an ambiguous item, and an erroneous or dated key. State what evidence changed the result, cite it, and store the original key and effective decision. If ambiguity remains, flag it and use the agreed grading policy. Avoid claiming mock questions duplicate the live exam.
+## Client notes
 
-Grade multi-select as a set unless the rubric specifies partial credit. Identify missing and extra choices. For ordering and matching compare the full arrangement. An unkeyed question stays ungraded until a rubric or agreed provisional answer exists.
-
-Lead with verdict, the chosen answer, and the reason. For a straightforward correct answer, a single explanatory sentence is enough. Apply the score delivery rules above. For a miss or guess, explain the decisive clue and why the closest distractor fails; record guesses even if correct. For “explain everything,” cover each option and give a concrete example. Use a brief mnemonic when helpful. Explain tiered concepts by connecting the workload, component and outcome. Keep a deep dive or source challenge on the same question. After grading wait for “next,” unless the user explicitly included an advance. One “next” advances one item.
-
-## Score and save
-
-Use one first-attempt record per session, bank and displayed question number. Replayed transcript events are idempotent. Store retries separately. Keep user choice, original and effective keys, result, confidence, hints, flags, dispute note and evidence. Retain explicit score adjustments and unknown fields in existing saves. Derive totals from unique first attempts plus documented adjustments; where a legacy save uses an agreed baseline, apply only subsequent deltas. Keep skipped, ungraded, out-of-range, and review attempts separate. On a correction, replace the result and apply the difference once. Count remaining questions from the actual session queue.
-
-After a meaningful change, persist the attempt, score, phase and cursor together in the session workspace's `study_progress.json` (or its session-specific folder). Read the latest state before changing it. Prefer writing a temporary sibling and atomically replacing the original after successful serialization. Confirm the saved cursor and totals before reporting successful persistence. If storage fails, preserve a compact in-chat checkpoint. Report the learner's requested counts. A quiz starting mid-bank does not imply earlier items were attempted.
-
-## Commands and handover
-
-- At a question: **repeat**, **slower/faster**, **hint**, **flag**, **skip**, **don't know**, **jump N**. A hint nudges without revealing the key. Skip stays ungraded; “don't know” records a miss. “Next” on an unanswered question asks for an answer or explicit skip.
-- After grading: **next**, **challenge**, **explain more**, **repeat explanation**, **compare**, **give an example**, **mnemonic**.
-- At any point: **help**, **status**, **summary**, **mode text/voice/read-aloud**, **speed q/e**, **pause/stop**, **resume**, **handover**, **review wrong/guessed/flagged**, **review my mock**, **create a guide/cheat sheet**. Retain natural-language equivalents.
-- On pause, stop, completion or handover, save the current phase and position. For a handover provide a copyable new-chat prompt asking Claude to use Study Buddy, source and state locations, next action, agreed scores, disputes, delivery mode and verification gaps. Read back the saved values to build the handover. If using inline-only state, include a compact `RESUME|` checkpoint at pauses and every ten graded answers. Honor existing resume codes. Report weak domains only when supported by enough attempts. End the voice call when explicitly requested and the client provides that control.
+- **Claude (claude.ai, desktop, mobile):** needs code execution for the scripts and PDFs. In voice conversations keep every reply speakable. If voice mode does not pick up the skill, start in text with the attachment ("Use Study Buddy, voice style, start at question 1"), then switch to voice.
+- **Claude Code:** files live in the project; use the scripts directly; `/study-buddy` invokes the skill.
+- **ChatGPT / Codex:** the same folder works as a skill where supported (`$study-buddy` in Codex). In ChatGPT voice mode, which reads out every reply, the voice rules matter even more.
+- **Handover:** on pause, stop or a long session, offer a copyable new-chat prompt: "Use Study Buddy. Resume <exam> from <progress file or RESUME code>, next question N, mode voice, score X/Y." plus the files to re-attach.

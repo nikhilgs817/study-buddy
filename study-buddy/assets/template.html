@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- Study Buddy component sample. Copy this file and study-pack.css into pack/,
+     keep the components you need, replace every sample value with researched content.
+     Sample content is NCA-AIIO (NVIDIA AI Infrastructure and Operations) so the look matches
+     a real pack; never reuse its facts for another exam. -->
+<title>NCA-AIIO Visual Core Study Guide</title>
+<link rel="stylesheet" href="study-pack.css">
+<!-- Footer text on every page (left); page numbers are automatic (right). -->
+<style>@page { @bottom-left { content: "NCA-AIIO Visual Core Study Guide · v1 · mapped to NVIDIA exam blueprint · 2026-11-26"; } }</style>
+</head>
+<body>
+
+<!-- 1. HERO: exam code, document name, one-line promise, format chips. -->
+<div class="hero">
+  <h1>NCA-AIIO<br>Visual Core Study Guide</h1>
+  <div class="subtitle">NVIDIA-Certified Associate · AI Infrastructure and Operations · every blueprint objective as a picture, a flow and a DevOps analogy</div>
+  <div class="chips">
+    <span class="chip">50 questions · 60 min</span><span class="chip">Online proctored</span>
+    <span class="chip">$125 · valid 2 years</span><span class="chip warn">Pass mark not published</span>
+  </div>
+</div>
+
+<!-- 2. EXAM ON ONE SCREEN: donut from scripts/charts.py, legend with weight status, domain mnemonic. -->
+<h2 class="sec"><span class="badge">0</span>The exam on one screen<span class="aside">weights: NVIDIA exam page, checked 2026-11-26</span></h2>
+<div class="weights">
+  <img src="weights-donut.svg" alt="Domain weights donut">
+  <div class="legend">
+    <div class="item"><span class="sw" style="background:#2563eb"></span><div><div class="nm">D1 Essential AI Knowledge</div><div class="meta">38% · ~19 questions · <span class="pill official">official</span></div></div></div>
+    <div class="item"><span class="sw" style="background:#65a30d"></span><div><div class="nm">D2 AI Infrastructure</div><div class="meta">40% · ~20 questions · <span class="pill official">official</span></div></div></div>
+    <div class="item"><span class="sw" style="background:#7c3aed"></span><div><div class="nm">D3 AI Operations</div><div class="meta">22% · ~11 questions · <span class="pill derived">derived</span></div></div></div>
+  </div>
+  <div class="mnemo-box"><div class="m">KNOW → BUILD → RUN</div><div class="s">D1 know what AI is<br>D2 build it: GPUs, network<br>D3 run it: monitor, schedule</div></div>
+</div>
+<div class="callout hook"><span class="label">Memory hook</span><p><b>KNOW → BUILD → RUN.</b> D1 + D2 are 78% of the exam, so product names and hardware facts outweigh theory. Pace yourself at ~72 seconds per question; flag anything past 90 s.</p></div>
+
+<!-- 3. ROSETTA STONE: exam vocabulary mapped to the learner's world (lenses.md). -->
+<h2 class="sec"><span class="badge">0</span>Rosetta stone: the AI factory in your DevOps vocabulary<span class="aside">anchor everything else here</span></h2>
+<table class="rosetta">
+  <tr><th class="l">NVIDIA AI factory</th><th></th><th class="r">Your DevOps world</th></tr>
+  <tr><td class="l">Triton / NIM serve models</td><td class="arrow">◀▶</td><td class="r">WebSphere serves the app</td></tr>
+  <tr><td class="l">NGC catalog (containers, models)</td><td class="arrow">◀▶</td><td class="r">Nexus / Artifactory</td></tr>
+  <tr><td class="l">Slurm + Kubernetes GPU Operator</td><td class="arrow">◀▶</td><td class="r">Jenkins controller + labelled agents</td></tr>
+  <tr><td class="l">Base Command Manager provisioning</td><td class="arrow">◀▶</td><td class="r">Ansible playbooks + PXE</td></tr>
+  <tr><td class="l">DCGM → Prometheus → Grafana</td><td class="arrow">◀▶</td><td class="r">Node exporter → Prometheus → Grafana</td></tr>
+</table>
+
+<!-- 4. OBJECTIVE SECTION: badge with objective id, flow lanes, table, callouts. -->
+<h2 class="sec"><span class="badge d1">1.2</span>Training vs inference<span class="aside">blueprint 1.2: compare training and inference requirements</span></h2>
+<div class="lane">
+  <div class="lane-title">Training · learn the weights · days to weeks · many GPUs, one job</div>
+  <div class="flow">
+    <div class="node">Batch of data<small>from storage</small></div><div class="arrow">▶</div>
+    <div class="node">Forward pass<small>predict</small></div><div class="arrow">▶</div>
+    <div class="node">Loss<small>how wrong?</small></div><div class="arrow">▶</div>
+    <div class="node">Backward pass<small>gradients</small></div><div class="arrow">▶</div>
+    <div class="node">All-reduce<small>NCCL syncs GPUs</small></div>
+  </div>
+</div>
+<div class="lane d2">
+  <div class="lane-title">Inference · use the weights · milliseconds · many replicas, many users</div>
+  <div class="flow">
+    <div class="node">User request<small>prompt / image</small></div><div class="arrow">▶</div>
+    <div class="node">Forward pass only<small>optimised by TensorRT</small></div><div class="arrow">▶</div>
+    <div class="node">Response<small>latency matters</small></div>
+  </div>
+</div>
+<table class="t">
+  <thead><tr><th></th><th>Training</th><th>Inference</th></tr></thead>
+  <tr><td>Optimise for</td><td>Throughput, time-to-train</td><td>Latency, cost per request</td></tr>
+  <tr><td>Memory</td><td>Weights + gradients + optimiser state</td><td>Weights + KV cache</td></tr>
+  <tr><td>Interconnect</td><td>Critical: NVLink + InfiniBand</td><td>Matters only for very large models</td></tr>
+</table>
+<div class="grid-2">
+  <div class="callout idea"><span class="label">The idea</span><p>Training is learning; inference is using what was learned. Training is one huge job; inference is many small, fast requests.</p></div>
+  <div class="callout trap"><span class="label">Exam trap</span><p>"Add more GPUs" is wrong when the scenario says latency per request is the problem: that is an inference optimisation question (TensorRT, batching), not a scale question.</p></div>
+  <div class="callout lens"><span class="label">DevOps lens · from your world</span><p>Training is the nightly full build on the whole agent farm; inference is production traffic on the app servers. Where it breaks: a build finishes, but a model is retrained repeatedly as data changes.</p></div>
+  <div class="callout hook"><span class="label">Memory hook</span><p><b>Train = Teach, Infer = Answer.</b> T for throughput, I for "instant".</p></div>
+</div>
+
+<!-- 5. STATS + WORKED EXAMPLE with real numbers and the arithmetic shown. -->
+<div class="grid-3" style="margin-top:8px">
+  <div class="stat d1"><div class="big">≈140 GB</div><div class="lbl">Serve a 70B model (FP16)</div><div class="small">70B × 2 bytes = 140 GB of weights</div></div>
+  <div class="stat d2"><div class="big">≈1.1 TB</div><div class="lbl">Train a 70B model</div><div class="small">~16 bytes/param with Adam, mixed precision</div></div>
+  <div class="stat d3"><div class="big">2×</div><div class="lbl">Why BF16 for training</div><div class="small">FP32 range at half the memory</div></div>
+</div>
+<div class="callout example"><span class="label">Worked example · memory sizing</span><p>A 13B model in FP16 needs 13 × 2 = 26 GB for weights alone, so it fits on one 80 GB GPU for inference with room for the KV cache, but training it (≈13 × 16 = 208 GB) needs at least three such GPUs.</p></div>
+
+<!-- 6. BAR LADDER for a comparison. Widths are percentages of the largest value. -->
+<h3>Precision ladder: bytes per parameter</h3>
+<div class="ladder">
+  <div class="bar-row"><span class="k">FP32</span><span class="bar" style="width:60%"></span><span class="v">4 B · full precision</span></div>
+  <div class="bar-row"><span class="k">BF16 / FP16</span><span class="bar" style="width:30%;background:#2563eb"></span><span class="v">2 B · training default</span></div>
+  <div class="bar-row"><span class="k">FP8</span><span class="bar" style="width:15%;background:#65a30d"></span><span class="v">1 B · Hopper/Blackwell Transformer Engine</span></div>
+  <div class="bar-row"><span class="k">FP4</span><span class="bar" style="width:7.5%;background:#7c3aed"></span><span class="v">0.5 B · Blackwell</span></div>
+</div>
+
+<!-- 7. RAPID RECALL: cover the right column and answer aloud. -->
+<h2 class="sec page-break"><span class="badge">?</span>Rapid-fire recall<span class="aside">cover the right column and answer aloud</span></h2>
+<table class="t recall">
+  <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+  <tr><td>Library for GPU-to-GPU all-reduce?</td><td>NCCL</td></tr>
+  <tr><td>Guaranteed isolated slice of one GPU?</td><td>MIG</td></tr>
+  <tr><td>IT load 2 MW, PUE 1.5: facility power?</td><td>3 MW</td></tr>
+</table>
+
+<!-- 8. SELF-CHECK (deep dive): questions here, answers at the end of the domain. -->
+<div class="card selfcheck"><b>Self-check · Domain 1</b>
+  <ol><li>Which phase needs gradients and optimiser state in GPU memory?</li><li>Name the NVIDIA tool that optimises a trained model for inference.</li></ol>
+</div>
+
+<!-- 9. PRACTICE QUESTION (practice set): original item, key in a separate section. -->
+<div class="q"><div class="qh">Practice 1 · D2 AI Infrastructure · single choice</div>
+  <p>A team's 8-GPU training job scales well inside one server but slows down sharply across four servers. Which component should they look at first?</p>
+  <ol><li>The GPU driver version</li><li>The inter-node network fabric</li><li>The container registry</li><li>The inference server</li></ol>
+</div>
+
+<!-- 10. SOURCES AND CONFIDENCE: always last. -->
+<div class="sources"><span class="label">Sources and confidence</span>
+Format, fees and D1/D2 weights: NVIDIA's NCA-AIIO exam page (official). D3 weight derived as the remainder. Memory figures are common rules of thumb (estimated). Topic emphasis cross-checked with public Udemy and Coursera course outlines. If anything differs from NVIDIA's current documentation, trust NVIDIA.</div>
+</body>
+</html>

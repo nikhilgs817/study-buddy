@@ -1,4 +1,4 @@
 interface:
   display_name: "Study Buddy"
-  short_description: "Practice exams, review mocks, and create study guides"
+  short_description: "Voice mock-exam coach and one-command exam prep packs"
   default_prompt: "Use $study-buddy with my exam materials and saved study preferences."
