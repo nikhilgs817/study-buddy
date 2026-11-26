@@ -1,0 +1,15 @@
+{
+  "exam": {"code": "NCA-AIIO", "name": "NVIDIA-Certified Associate: AI Infrastructure and Operations",
+           "vendor": "NVIDIA", "version": "", "level": "associate",
+           "questions": 50, "minutes": 60, "pass_mark": null, "price": "$125",
+           "delivery": "online proctored", "validity": "2 years", "prerequisites": "none",
+           "official_url": "", "checked": "2026-11-26"},
+  "domains": [
+    {"id": "D1", "name": "Essential AI Knowledge", "weight": 38, "weight_status": "official", "approx_questions": 19, "color": "#2563eb",
+     "objectives": [{"id": "1.1", "text": "Example objective text from the official blueprint", "source": "official"}]},
+    {"id": "D2", "name": "AI Infrastructure", "weight": 40, "weight_status": "official", "approx_questions": 20, "color": "#65a30d", "objectives": []},
+    {"id": "D3", "name": "AI Operations", "weight": 22, "weight_status": "derived", "approx_questions": 11, "color": "#7c3aed", "objectives": []}
+  ],
+  "weight_method": "D1 and D2 official; D3 derived as the remainder.",
+  "sources": [{"title": "Vendor exam page", "url": "", "tier": 1, "used_for": "format, domains, weights"}]
+}

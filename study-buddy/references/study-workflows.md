@@ -1,5 +1,7 @@
 # Study materials and mock review
 
+For a full exam prep pack researched from the web, follow [prep-pack.md](prep-pack.md). This file covers documents built from the learner's own materials (slides, course notes, a single topic), concept explanations, and mock reviews. Visual rules for every document: [visual-style.md](visual-style.md). Examples from the learner's field: [lenses.md](lenses.md).
+
 ## Create a document or visual cheat sheet
 
 Start from the requested exam, supplied curriculum and learner's background. Use an official exam blueprint when scope or weights matter and verify its version. For an “all slides” request, inventory the page range, including slides with only images, inspect diagrams, and track which pages contribute to each topic. Group repeated terms and retain slide/page pointers. Identify source gaps or disagreements explicitly.
@@ -8,7 +10,7 @@ A cheat sheet should be usable the night before the exam. Open with a labeled ar
 
 For a longer study guide, organize chapters by objective. Start each with a scenario, illustrate the mechanism, explain the tradeoff and end with an original application question. Use the user's field for examples when known. For an engineer, a deployment or debugging decision often works better than a dictionary definition. A diagram or analogy must preserve the direction of a request and the role of each component. Flag the point where an analogy breaks.
 
-Deliver the requested file in the workspace with an openable link. For PDF or DOCX use available document tools, render and inspect layout, and check diagrams, labels, page references and answer separation. If only Markdown output is feasible, deliver the usable Markdown and state the format limitation. Keep private study material and progress in the session workspace.
+Deliver the requested file in the workspace with an openable link. Build PDFs as HTML with `assets/study-pack.css` and render with `scripts/render_pdf.py --png-preview`; for DOCX use available document tools. Render and inspect layout, and check diagrams, labels, page references and answer separation. If only Markdown output is feasible, deliver the usable Markdown and state the format limitation. Keep private study material and progress in the session workspace.
 
 ## Diagram quality
 
@@ -18,7 +20,7 @@ Use legible type at the intended reading size, short node labels, consistent dir
 
 ## Explain a concept during practice
 
-Give the plain meaning, its job, and one example. Compare similar terms using a single decision. For instance, an inference server receives a request and returns a prediction; a model repository stores files for the server to load. Draw the two flows independently. For numeric formats use an actual number or range; for tools use a workload. Offer a short mnemonic that the learner can reverse into a correct explanation. A recall check can ask “Which component loads the files?” Leave the exam cursor and score alone during teaching.
+Give the plain meaning, its job, and one example from the learner's lens. Compare similar terms using a single decision. For instance, an inference server receives a request and returns a prediction; a model repository stores files for the server to load. Draw the two flows independently. For numeric formats use an actual number or range; for tools use a workload. Offer a short mnemonic that the learner can reverse into a correct explanation. A recall check can ask “Which component loads the files?” Leave the exam cursor and score alone during teaching.
 
 ## Review a completed mock by voice
 

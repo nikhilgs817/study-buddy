@@ -1,0 +1,183 @@
+/* Study Buddy prep-pack design system.
+   Light A4 pages, gradient cover, numbered section badges, colour-coded callouts.
+   Works in Chromium (print to PDF) and WeasyPrint. Copy next to the HTML file. */
+
+:root {
+  --ink: #0f172a;        /* body text */
+  --ink-2: #334155;      /* secondary text */
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --paper: #ffffff;
+  --panel: #f8fafc;
+  --head: #1e293b;       /* table header */
+
+  /* domain colours: D1..D6 (donut, chips, flow lanes) */
+  --d1: #2563eb; --d1-bg: #eff6ff; --d1-bd: #bfdbfe;
+  --d2: #65a30d; --d2-bg: #f7fee7; --d2-bd: #bef264;
+  --d3: #7c3aed; --d3-bg: #f5f3ff; --d3-bd: #ddd6fe;
+  --d4: #ea580c; --d4-bg: #fff7ed; --d4-bd: #fed7aa;
+  --d5: #0891b2; --d5-bg: #ecfeff; --d5-bd: #a5f3fc;
+  --d6: #db2777; --d6-bg: #fdf2f8; --d6-bd: #fbcfe8;
+
+  /* callouts */
+  --idea: #1d4ed8;  --idea-bg: #eff6ff;  --idea-bd: #bfdbfe;
+  --trap: #dc2626;  --trap-bg: #fef2f2;  --trap-bd: #fecaca;
+  --lens: #ea580c;  --lens-bg: #fff7ed;  --lens-bd: #fdba74;
+  --hook: #15803d;  --hook-bg: #f0fdf4;  --hook-bd: #86efac;
+  --ex:   #0369a1;  --ex-bg:   #f0f9ff;  --ex-bd:   #bae6fd;
+}
+
+@page {
+  size: A4;
+  margin: 14mm 13mm 16mm 13mm;
+  /* Each document sets its own footer text in a <style> block: @page { @bottom-left { content: "..." } } */
+  @bottom-left  { content: "Study Buddy prep pack"; font: 7pt Inter, "Segoe UI", Arial, sans-serif; color: #64748b; }
+  @bottom-right { content: counter(page) " / " counter(pages); font: 7pt Inter, "Segoe UI", Arial, sans-serif; color: #64748b; }
+}
+@page :first { @bottom-left { content: none; } }
+
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper);
+  font: 9.5pt/1.45 Inter, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+p { margin: 0 0 6px; }
+b, strong { font-weight: 700; }
+code, .mono { font-family: "JetBrains Mono", Consolas, "Courier New", monospace; font-size: 0.92em; background: #f1f5f9; padding: 0 3px; border-radius: 3px; }
+a { color: var(--d1); text-decoration: none; }
+.small { font-size: 8pt; color: var(--muted); }
+.page-break { page-break-before: always; break-before: page; }
+.keep { page-break-inside: avoid; break-inside: avoid; }
+
+/* ---------- cover / hero ---------- */
+.hero {
+  border-radius: 14px; padding: 22px 24px 18px; color: #fff; margin-bottom: 14px;
+  background: linear-gradient(120deg, #0b1437 0%, #1e1b6b 45%, #3b2a8f 70%, #2f5d2a 100%);
+}
+.hero h1 { font-size: 26pt; line-height: 1.08; margin: 0 0 8px; font-weight: 800; letter-spacing: -0.3px; }
+.hero .subtitle { font-size: 10pt; color: #dbe4ff; margin-bottom: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-block; font-size: 7.5pt; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+        background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.22); margin: 0 4px 4px 0; }
+.chip.warn { background: rgba(250,204,21,0.25); }
+
+/* ---------- section headings ---------- */
+h2.sec { display: flex; align-items: center; gap: 8px; font-size: 13.5pt; margin: 16px 0 8px; font-weight: 800; page-break-after: avoid; break-after: avoid; }
+h2.sec .badge { display: inline-block; min-width: 22px; padding: 2px 6px; border-radius: 6px; background: var(--head); color: #fff; font-size: 9pt; text-align: center; }
+h2.sec .badge.d1 { background: var(--d1); } h2.sec .badge.d2 { background: var(--d2); } h2.sec .badge.d3 { background: var(--d3); }
+h2.sec .badge.d4 { background: var(--d4); } h2.sec .badge.d5 { background: var(--d5); } h2.sec .badge.d6 { background: var(--d6); }
+h2.sec .aside { margin-left: auto; font-size: 7.5pt; font-weight: 400; color: var(--muted); }
+h3 { font-size: 11pt; margin: 12px 0 6px; font-weight: 800; page-break-after: avoid; break-after: avoid; }
+.domain-banner { border-radius: 10px; padding: 10px 14px; margin: 6px 0 10px; color: #fff; font-weight: 800; font-size: 14pt; }
+.domain-banner .w { float: right; font-size: 10pt; font-weight: 700; opacity: 0.9; margin-top: 3px; }
+.domain-banner.d1 { background: var(--d1); } .domain-banner.d2 { background: var(--d2); } .domain-banner.d3 { background: var(--d3); }
+.domain-banner.d4 { background: var(--d4); } .domain-banner.d5 { background: var(--d5); } .domain-banner.d6 { background: var(--d6); }
+
+/* ---------- callouts ---------- */
+.callout { border-radius: 9px; padding: 8px 11px; margin: 8px 0; border: 1px solid; page-break-inside: avoid; break-inside: avoid; }
+.callout .label { display: block; font-size: 7pt; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 3px; }
+.callout p:last-child { margin-bottom: 0; }
+.callout.idea { background: var(--idea-bg); border-color: var(--idea-bd); } .callout.idea .label { color: var(--idea); }
+.callout.trap { background: var(--trap-bg); border-color: var(--trap-bd); } .callout.trap .label { color: var(--trap); }
+.callout.lens { background: var(--lens-bg); border-color: var(--lens-bd); } .callout.lens .label { color: var(--lens); }
+.callout.hook { background: var(--hook-bg); border-color: var(--hook-bd); } .callout.hook .label { color: var(--hook); }
+.callout.example { background: var(--ex-bg); border-color: var(--ex-bd); } .callout.example .label { color: var(--ex); }
+.callout.note { background: var(--panel); border-color: var(--line); } .callout.note .label { color: var(--ink-2); }
+
+/* ---------- layout helpers ---------- */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.grid-2 > .callout, .grid-3 > .callout { margin: 0; }
+.row { display: flex; gap: 10px; align-items: center; }
+.row > .grow { flex: 1; }
+.card { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 10px 12px; page-break-inside: avoid; break-inside: avoid; }
+
+/* ---------- stats ---------- */
+.stat { border-radius: 10px; padding: 9px 11px; border: 1px solid var(--line); background: var(--panel); page-break-inside: avoid; break-inside: avoid; }
+.stat .big { font-size: 17pt; font-weight: 800; line-height: 1.1; }
+.stat .lbl { font-weight: 700; font-size: 8.5pt; margin: 2px 0; }
+.stat.d1 { background: var(--d1-bg); border-color: var(--d1-bd); } .stat.d1 .big, .stat.d1 .lbl { color: var(--d1); }
+.stat.d2 { background: var(--d2-bg); border-color: var(--d2-bd); } .stat.d2 .big, .stat.d2 .lbl { color: var(--d2); }
+.stat.d3 { background: var(--d3-bg); border-color: var(--d3-bd); } .stat.d3 .big, .stat.d3 .lbl { color: var(--d3); }
+.stat.d4 { background: var(--d4-bg); border-color: var(--d4-bd); } .stat.d4 .big, .stat.d4 .lbl { color: var(--d4); }
+
+/* ---------- tables ---------- */
+table.t { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 8.5pt; page-break-inside: auto; }
+table.t th { background: var(--head); color: #fff; text-align: left; font-size: 7.5pt; letter-spacing: 0.4px; text-transform: uppercase; padding: 5px 7px; }
+table.t td { padding: 5px 7px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.t tr:nth-child(even) td { background: #fbfdff; }
+table.t td:first-child { font-weight: 700; }
+table.t tr { page-break-inside: avoid; break-inside: avoid; }
+table.t thead { display: table-header-group; }
+.pill { display: inline-block; font-size: 7pt; font-weight: 700; padding: 1px 6px; border-radius: 999px; border: 1px solid; }
+.pill.official { color: #15803d; border-color: #86efac; background: #f0fdf4; }
+.pill.derived  { color: #0369a1; border-color: #bae6fd; background: #f0f9ff; }
+.pill.estimated{ color: #b45309; border-color: #fcd34d; background: #fffbeb; }
+
+/* ---------- donut + legend ---------- */
+.weights { display: grid; grid-template-columns: 150px 1fr 170px; gap: 12px; align-items: center; }
+.weights img, .weights svg { width: 150px; height: 150px; }
+.legend .item { display: flex; gap: 7px; align-items: flex-start; margin: 4px 0; }
+.legend .sw { width: 11px; height: 11px; border-radius: 3px; margin-top: 3px; flex: none; }
+.legend .nm { font-weight: 700; font-size: 9pt; }
+.legend .meta { font-size: 7.5pt; color: var(--muted); }
+.mnemo-box { border-radius: 10px; background: #eef2ff; border: 1px solid #c7d2fe; padding: 10px; text-align: center; }
+.mnemo-box .m { font-weight: 800; font-size: 11.5pt; margin-bottom: 4px; }
+.mnemo-box .s { font-size: 7.5pt; color: var(--ink-2); }
+
+/* ---------- Rosetta stone (exam term <-> learner's world) ---------- */
+.rosetta { width: 100%; border-collapse: separate; border-spacing: 0 4px; font-size: 8pt; }
+.rosetta th { font-size: 7.5pt; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; padding: 2px 6px; }
+.rosetta th.l { color: var(--d1); text-align: center; } .rosetta th.r { color: var(--lens); text-align: center; }
+.rosetta td { padding: 4px 8px; text-align: center; font-weight: 700; }
+.rosetta td.l { background: var(--d1-bg); border: 1px solid var(--d1-bd); border-radius: 6px; color: #1e3a8a; }
+.rosetta td.r { background: var(--lens-bg); border: 1px solid var(--lens-bd); border-radius: 6px; color: #9a3412; }
+.rosetta td.arrow { width: 22px; padding: 0; color: var(--ink-2); font-weight: 400; }
+
+/* ---------- flow diagrams (boxes and arrows) ---------- */
+.lane { border-radius: 10px; border: 1.5px solid var(--d1-bd); background: var(--d1-bg); padding: 7px 9px 9px; margin: 8px 0; page-break-inside: avoid; break-inside: avoid; }
+.lane .lane-title { font-size: 7.5pt; font-weight: 800; color: var(--d1); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+.lane.d2 { border-color: var(--d2-bd); background: var(--d2-bg); } .lane.d2 .lane-title { color: var(--d2); }
+.lane.d3 { border-color: var(--d3-bd); background: var(--d3-bg); } .lane.d3 .lane-title { color: var(--d3); }
+.lane.d4 { border-color: var(--d4-bd); background: var(--d4-bg); } .lane.d4 .lane-title { color: var(--d4); }
+.flow { display: flex; align-items: center; gap: 0; }
+.flow .node { flex: 1; background: #fff; border: 1.5px solid var(--d1); border-radius: 7px; padding: 5px 6px; text-align: center; font-size: 8pt; font-weight: 700; color: #1e3a8a; }
+.flow .node small { display: block; font-weight: 400; color: var(--muted); font-size: 6.8pt; }
+.lane.d2 .node { border-color: var(--d2); color: #365314; } .lane.d3 .node { border-color: var(--d3); color: #4c1d95; } .lane.d4 .node { border-color: var(--d4); color: #7c2d12; }
+.flow .arrow { flex: none; width: 22px; text-align: center; color: var(--ink-2); font-size: 11pt; }
+.flow .arrow small { display: block; font-size: 6pt; color: var(--muted); }
+
+/* ---------- bar ladder (comparisons, weights) ---------- */
+.ladder .bar-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 8pt; }
+.ladder .bar-row .k { width: 110px; text-align: right; font-weight: 700; }
+.ladder .bar-row .bar { height: 12px; border-radius: 3px; background: var(--head); }
+.ladder .bar-row .v { color: var(--ink-2); }
+
+/* ---------- recall and self-check ---------- */
+table.recall td:first-child { font-weight: 400; }
+table.recall td:last-child { font-weight: 700; color: var(--d1); }
+.selfcheck ol { margin: 4px 0 0 18px; padding: 0; }
+.selfcheck li { margin: 3px 0; }
+.answers { columns: 2; column-gap: 18px; font-size: 8.5pt; }
+.answers p { break-inside: avoid; }
+
+/* ---------- practice questions ---------- */
+.q { border: 1px solid var(--line); border-radius: 9px; padding: 8px 11px; margin: 7px 0; page-break-inside: avoid; break-inside: avoid; }
+.q .qh { font-size: 7.5pt; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+.q ol { list-style: upper-alpha; margin: 4px 0 0 20px; padding: 0; }
+
+/* ---------- sources ---------- */
+.sources { border: 1px solid var(--line); background: var(--panel); border-radius: 9px; padding: 8px 11px; font-size: 7.8pt; color: var(--ink-2); margin-top: 12px; page-break-inside: avoid; break-inside: avoid; }
+.sources .label { font-size: 7pt; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--ink); display: block; margin-bottom: 3px; }
+
+/* ---------- dense mode for 1-2 page cheatsheets ---------- */
+body.dense { font-size: 8pt; line-height: 1.32; }
+body.dense .hero { padding: 12px 16px 10px; }
+body.dense .hero h1 { font-size: 17pt; }
+body.dense h2.sec { font-size: 10.5pt; margin: 8px 0 4px; }
+body.dense table.t { font-size: 7.4pt; margin: 3px 0 6px; }
+body.dense table.t td, body.dense table.t th { padding: 3px 5px; }
+body.dense .callout { padding: 5px 8px; margin: 5px 0; }
+.cols-2 { columns: 2; column-gap: 12px; }
+.cols-2 > * { break-inside: avoid; }
